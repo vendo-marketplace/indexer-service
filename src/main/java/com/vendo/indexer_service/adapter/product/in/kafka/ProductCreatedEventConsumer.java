@@ -1,5 +1,7 @@
 package com.vendo.indexer_service.adapter.product.in.kafka;
 
+import com.vendo.indexer_service.adapter.product.in.kafka.dto.ProductCreatedEvent;
+import com.vendo.indexer_service.adapter.product.out.mapper.EventProductMapper;
 import com.vendo.indexer_service.port.product.ProductIndexUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,16 +15,16 @@ class ProductCreatedEventConsumer {
 
     private final ProductIndexUseCase productIndexUseCase;
 
+    private final EventProductMapper mapper;
+
     @KafkaListener(
             topics = "${kafka.events.product.created-event.topic}",
             groupId = "${kafka.events.product.created-event.groupId}",
             properties = {"auto.offset.reset: ${kafka.events.product.created-event.properties.auto-offset-reset}"},
             containerFactory = "${kafka.events.email-otp-notification-event.container-factory}"
     )
-    // TODO add event dto
-    void listenProductCreatedEvent(Object event) {
-        // TODO map event to domain product object
-        productIndexUseCase.index(event);
+    void listenProductCreatedEvent(ProductCreatedEvent event) {
+        productIndexUseCase.index(mapper.toProduct(event));
     }
 
 }
