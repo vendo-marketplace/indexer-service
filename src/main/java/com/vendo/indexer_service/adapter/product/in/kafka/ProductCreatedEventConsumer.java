@@ -26,5 +26,4 @@ class ProductCreatedEventConsumer {
     void listenProductCreatedEvent(ProductCreatedEvent event) {
         productIndexUseCase.index(mapper.toProduct(event));
     }
-
 }

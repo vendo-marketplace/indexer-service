@@ -17,7 +17,6 @@ public record Product(
 
     public record Attribute(
             String title,
-            // TODO move Attribute type to lib to use here
             String type,
             List<String> values
     ) {

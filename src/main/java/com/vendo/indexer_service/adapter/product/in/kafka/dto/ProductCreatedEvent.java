@@ -12,13 +12,12 @@ public record ProductCreatedEvent(
         BigDecimal price,
         String ownerId,
         String categoryId,
-        List<Attribute> attributes,
+        List<AttributeEvent> attributes,
         Boolean active
 ) {
 
-    public record Attribute(
+    public record AttributeEvent(
             String title,
-            // TODO move Attribute type to lib to use here
             String type,
             List<String> values
     ) {
