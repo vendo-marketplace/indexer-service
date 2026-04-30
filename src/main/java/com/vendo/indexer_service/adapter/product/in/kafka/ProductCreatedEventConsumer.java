@@ -1,6 +1,6 @@
 package com.vendo.indexer_service.adapter.product.in.kafka;
 
-import com.vendo.indexer_service.adapter.product.in.kafka.dto.ProductCreatedEvent;
+import com.vendo.event_lib.product.ProductCreatedEvent;
 import com.vendo.indexer_service.adapter.product.out.mapper.EventProductMapper;
 import com.vendo.indexer_service.port.product.ProductIndexUseCase;
 import lombok.RequiredArgsConstructor;
