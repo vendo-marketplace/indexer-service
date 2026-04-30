@@ -3,5 +3,6 @@ spring:
     name: indexer-service
   profiles:
     active: ${APP_PROFILE}
+    include: kafka
   config:
     import: "optional:configserver:${CONFIG_SERVER_URL}"
