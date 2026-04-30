@@ -21,7 +21,7 @@ class ProductCreatedEventConsumer {
             topics = "${kafka.events.product.created-event.topic}",
             groupId = "${kafka.events.product.created-event.groupId}",
             properties = {"auto.offset.reset: ${kafka.events.product.created-event.properties.auto-offset-reset}"},
-            containerFactory = "${kafka.events.email-otp-notification-event.container-factory}"
+            containerFactory = "${kafka.events.product.created-event.container-factory}"
     )
     void listenProductCreatedEvent(ProductCreatedEvent event) {
         productIndexUseCase.index(mapper.toProduct(event));
