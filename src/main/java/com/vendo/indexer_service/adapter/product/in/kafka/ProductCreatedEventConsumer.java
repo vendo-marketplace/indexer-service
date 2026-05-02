@@ -24,6 +24,7 @@ class ProductCreatedEventConsumer {
             containerFactory = "${kafka.events.product.created-event.container-factory}"
     )
     void listenProductCreatedEvent(ProductCreatedEvent event) {
+        log.info("Received event for product created: {}.", event);
         productIndexUseCase.index(mapper.toProduct(event));
     }
 }
