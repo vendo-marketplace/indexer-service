@@ -43,6 +43,9 @@ public class ElasticProduct {
     public record ElasticAttribute(
 
             @Field(type = FieldType.Keyword)
+            String id,
+
+            @Field(type = FieldType.Keyword)
             String title,
 
             @Field(type = FieldType.Keyword)
