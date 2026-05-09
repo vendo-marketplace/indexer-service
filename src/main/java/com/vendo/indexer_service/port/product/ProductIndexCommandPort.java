@@ -6,4 +6,6 @@ public interface ProductIndexCommandPort {
 
     void save(Product product);
 
+    void update(String id, Product product);
+
 }

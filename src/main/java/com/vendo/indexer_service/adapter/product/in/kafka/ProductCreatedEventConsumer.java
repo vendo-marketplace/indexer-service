@@ -25,6 +25,6 @@ class ProductCreatedEventConsumer {
     )
     void listenProductCreatedEvent(ProductCreatedEvent event) {
         log.info("Received event for product created: {}.", event);
-        productIndexUseCase.index(mapper.toProduct(event));
+        productIndexUseCase.save(mapper.toProduct(event));
     }
 }
