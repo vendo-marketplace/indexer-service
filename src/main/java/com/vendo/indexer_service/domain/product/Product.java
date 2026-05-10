@@ -17,8 +17,6 @@ public record Product(
 
     public record Attribute(
             String id,
-            String title,
-            String type,
             List<String> values
     ) {
     }

@@ -45,12 +45,6 @@ public class ElasticProduct {
             @Field(type = FieldType.Keyword)
             String id,
 
-            @Field(index = false)
-            String title,
-
-            @Field(index = false)
-            String type,
-
             @Field(type = FieldType.Keyword)
             List<String> values
 
