@@ -45,10 +45,10 @@ public class ElasticProduct {
             @Field(type = FieldType.Keyword)
             String id,
 
-            @Field(type = FieldType.Keyword)
+            @Field(index = false)
             String title,
 
-            @Field(type = FieldType.Keyword)
+            @Field(index = false)
             String type,
 
             @Field(type = FieldType.Keyword)
