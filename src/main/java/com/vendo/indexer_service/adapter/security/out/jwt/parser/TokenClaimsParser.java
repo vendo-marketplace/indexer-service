@@ -1,0 +1,6 @@
+package com.vendo.indexer_service.adapter.security.out.jwt.parser;
+
+public interface TokenClaimsParser {
+
+    TokenClaims extract(String token);
+}

@@ -1,8 +1,8 @@
 package com.vendo.indexer_service.application.product;
 
 import com.vendo.indexer_service.domain.product.Product;
-import com.vendo.indexer_service.port.product.ProductIndexCommandPort;
-import com.vendo.indexer_service.port.product.ProductIndexUseCase;
+import com.vendo.indexer_service.port.product.index.ProductIndexCommandPort;
+import com.vendo.indexer_service.port.product.index.ProductIndexUseCase;
 import com.vendo.utils_lib.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

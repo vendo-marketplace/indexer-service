@@ -2,7 +2,7 @@ package com.vendo.indexer_service.adapter.product.in.kafka;
 
 import com.vendo.event_lib.product.ProductCreatedEvent;
 import com.vendo.indexer_service.adapter.product.out.mapper.EventProductMapper;
-import com.vendo.indexer_service.port.product.ProductIndexUseCase;
+import com.vendo.indexer_service.port.product.index.ProductIndexUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
