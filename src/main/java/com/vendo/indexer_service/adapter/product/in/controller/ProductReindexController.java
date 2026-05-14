@@ -1,4 +1,4 @@
-package com.vendo.indexer_service.adapter.product.in;
+package com.vendo.indexer_service.adapter.product.in.controller;
 
 import com.vendo.indexer_service.port.product.index.ProductReindexUseCase;
 import lombok.RequiredArgsConstructor;
