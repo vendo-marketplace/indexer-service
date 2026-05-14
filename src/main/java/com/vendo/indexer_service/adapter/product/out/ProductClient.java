@@ -17,6 +17,6 @@ import java.util.List;
 public interface ProductClient {
 
     @GetMapping
-    List<Product> getAll(@RequestParam("cursor") String cursor, @RequestParam("limit") int limit);
+    List<Product> getAll(@RequestParam(required = false, name = "cursor") String cursor, @RequestParam("limit") int limit);
 
 }

@@ -8,14 +8,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import java.util.List;
-
 @Mapper(config = MapStructConfig.class)
 public interface ElasticProductMapper {
 
     ElasticProduct toEntity(Product product);
-
-    List<ElasticProduct> toEntities(List<Product> products);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntity(@MappingTarget ElasticProduct entity, Product product);

@@ -8,16 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/products")
 @PreAuthorize("hasAuthority('ADMIN')")
-@RequiredArgsConstructor
 public class ProductReindexController {
 
-    private final ProductReindexUseCase useCase;
+    private final ProductReindexUseCase productReindexUseCase;
 
     @PostMapping("/reindex")
-    void reindexAll() {
-        useCase.reindex();
+    void reindex() {
+        productReindexUseCase.process();
     }
 
 }
