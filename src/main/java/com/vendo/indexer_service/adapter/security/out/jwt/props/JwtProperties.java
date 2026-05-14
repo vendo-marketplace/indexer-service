@@ -1,4 +1,4 @@
-package com.vendo.indexer_service.adapter.security.out.config;
+package com.vendo.indexer_service.adapter.security.out.jwt.props;
 
 import lombok.Getter;
 import lombok.Setter;

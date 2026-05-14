@@ -1,6 +1,7 @@
 package com.vendo.indexer_service.adapter.security.out.jwt.parser;
 
 import com.vendo.indexer_service.adapter.security.out.jwt.JwtService;
+import com.vendo.indexer_service.adapter.security.out.jwt.props.JwtProperties;
 import com.vendo.security_lib.type.UserTokenClaim;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,11 @@ public class JwtClaimsParser implements TokenClaimsParser {
 
     private final JwtService jwtService;
 
+    private final JwtProperties jwtProperties;
+
     @Override
     public TokenClaims extract(String token) {
-        Claims claims = jwtService.extractAllClaims(token);
+        Claims claims = jwtService.extractAllClaims(token, jwtProperties.getSecret().key());
 
         String id = extractId(claims);
         List<String> roles = extractRoles(claims);
