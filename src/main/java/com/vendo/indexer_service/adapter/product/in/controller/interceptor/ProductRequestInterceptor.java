@@ -1,4 +1,4 @@
-package com.vendo.indexer_service.adapter.product.in.interceptor;
+package com.vendo.indexer_service.adapter.product.in.controller.interceptor;
 
 import com.vendo.core_lib.type.ServiceName;
 import com.vendo.indexer_service.adapter.security.out.jwt.InternalTokenGenerationPort;

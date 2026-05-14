@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ProductReindexPort {
 
-    void process(List<Product> products);
+    void reindex(List<Product> products);
 
     boolean isProcessing();
 

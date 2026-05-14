@@ -1,4 +1,4 @@
-package com.vendo.indexer_service.adapter.product.in.controller;
+package com.vendo.indexer_service.adapter.product.in.controller.controller;
 
 import com.vendo.indexer_service.port.product.index.ProductReindexUseCase;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class ProductReindexController {
 
     @PostMapping("/reindex")
     void reindex() {
-        productReindexUseCase.process();
+        productReindexUseCase.reindex();
     }
 
 }

@@ -1,0 +1,32 @@
+spring:
+  cloud:
+    discovery:
+      enabled: false
+  kafka:
+    bootstrap-servers: localhost:9092
+    listener:
+      auto-startup: false
+
+product:
+  reindex:
+    batch-size: 1000
+
+eureka:
+  client:
+    enabled: false
+
+kafka:
+  events:
+    product:
+      created-event:
+        topic: "PRODUCT_CREATED_TOPIC"
+        groupId: "product_created_group"
+        container-factory: "consumerContainerFactory"
+        properties:
+          auto-offset-reset: "latest"
+      updated-event:
+        topic: "PRODUCT_UPDATED_TOPIC"
+        groupId: "product_updated_group"
+        container-factory: "consumerContainerFactory"
+        properties:
+          auto-offset-reset: "latest"

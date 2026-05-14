@@ -1,4 +1,4 @@
-package com.vendo.indexer_service.adapter.product.in.kafka;
+package com.vendo.indexer_service.adapter.product.in.controller.kafka;
 
 import com.vendo.event_lib.product.ProductUpdatedEvent;
 import com.vendo.indexer_service.adapter.product.out.mapper.EventProductMapper;

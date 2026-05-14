@@ -22,7 +22,7 @@ public class ProductReindexAdapter implements ProductReindexPort {
     private final ReentrantLock reentrantLock = new ReentrantLock();
 
     @Override
-    public void process(List<Product> products) {
+    public void reindex(List<Product> products) {
         if (!reentrantLock.tryLock()) return;
 
         try {

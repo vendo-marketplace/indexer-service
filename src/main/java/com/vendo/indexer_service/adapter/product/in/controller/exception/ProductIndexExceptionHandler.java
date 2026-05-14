@@ -1,4 +1,4 @@
-package com.vendo.indexer_service.adapter.product.in.exception;
+package com.vendo.indexer_service.adapter.product.in.controller.exception;
 
 import com.vendo.indexer_service.domain.product.exception.ProductAlreadyReindexingException;
 import com.vendo.security_lib.exception.response.ExceptionResponse;
