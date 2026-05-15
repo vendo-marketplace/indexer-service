@@ -1,9 +1,12 @@
 package com.vendo.indexer_service.domain.product;
 
+import lombok.Builder;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@Builder
 public record Product(
         String id,
         String title,

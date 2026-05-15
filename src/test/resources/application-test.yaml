@@ -7,13 +7,13 @@ spring:
     listener:
       auto-startup: false
 
-product:
-  reindex:
-    batch-size: 1000
-
 eureka:
   client:
     enabled: false
+
+product:
+  reindex:
+    batch-size: 1
 
 kafka:
   events:
@@ -30,3 +30,4 @@ kafka:
         container-factory: "consumerContainerFactory"
         properties:
           auto-offset-reset: "latest"
+
