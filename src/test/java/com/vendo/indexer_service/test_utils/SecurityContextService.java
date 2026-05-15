@@ -9,7 +9,7 @@ public class SecurityContextService {
 
     public static Authentication initializeAuth(TokenClaims claims) {
         return new UsernamePasswordAuthenticationToken(
-                claims,
+                claims.userId(),
                 null,
                 claims.roles().stream().map(SimpleGrantedAuthority::new).toList());
     }

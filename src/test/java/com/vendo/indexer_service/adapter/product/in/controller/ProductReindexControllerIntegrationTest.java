@@ -3,11 +3,12 @@ package com.vendo.indexer_service.adapter.product.in.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendo.indexer_service.adapter.product.out.elasticsearch.ElasticProductRepository;
 import com.vendo.indexer_service.adapter.security.out.jwt.parser.TokenClaims;
-import com.vendo.indexer_service.config.TestAsyncConfig;
+import com.vendo.indexer_service.domain.product.Product;
 import com.vendo.indexer_service.port.product.ProductQueryPort;
 import com.vendo.indexer_service.port.product.index.ProductReindexPort;
-import com.vendo.indexer_service.port.product.index.ProductReindexUseCase;
 import com.vendo.indexer_service.test_utils.SecurityContextService;
+import com.vendo.indexer_service.test_utils.builder.ProductDataBuilder;
+import com.vendo.security_lib.exception.response.ExceptionResponse;
 import com.vendo.user_lib.type.UserRole;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -15,8 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -24,8 +24,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,28 +43,25 @@ public class ProductReindexControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private ElasticsearchOperations elasticsearchOperations;
-    @MockitoBean
-    private ElasticProductRepository elasticProductRepository;
-
-    @MockitoBean
-    private ProductReindexUseCase productReindexUseCase;
-    @MockitoBean
     private ProductReindexPort productReindexPort;
     @MockitoBean
     private ProductQueryPort productQueryPort;
+    @MockitoBean
+    private ElasticProductRepository repository;
 
     @Value("${product.reindex.batch-size}")
-    private int BATCH_SIZE;
+    private int REINDEX_BATCH_SIZE;
 
     @Nested
-    @Import(TestAsyncConfig.class)
     class ReindexTests {
 
         @Test
-        void reindex_shouldSuccessfullyReindexProducts() throws Exception {
+        void reindex_shouldSuccessfullyAcceptRequest_whenAdmin() throws Exception {
+            Product product = ProductDataBuilder.withAllFields().build();
+
             when(productReindexPort.isProcessing()).thenReturn(false);
-            when(productQueryPort.getAll(null, BATCH_SIZE)).thenReturn(List.of());
+            when(productQueryPort.getAll(null, REINDEX_BATCH_SIZE)).thenReturn(List.of(product));
+            when(productQueryPort.getAll(product.id(), REINDEX_BATCH_SIZE)).thenReturn(List.of());
 
             mockMvc.perform(post("/products/reindex")
                             .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.ADMIN.name())))))
@@ -70,23 +69,46 @@ public class ProductReindexControllerIntegrationTest {
                     .andExpect(status().isOk());
 
             verify(productReindexPort).isProcessing();
-            verify(productQueryPort).getAll(null, BATCH_SIZE);
+            verify(productQueryPort, times(2)).getAll(any(), eq(REINDEX_BATCH_SIZE));
+            verify(productReindexPort).reindex(List.of(product));
         }
 
         @Test
-        void reindex_shouldReturnUnauthorized_whenUserNotAdmin() {
+        void reindex_shouldReturnUnauthorized_whenUserNotAdmin() throws Exception {
+            String content = mockMvc.perform(post("/products/reindex")
+                            .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.USER.name())))))
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isForbidden()).andReturn().getResponse().getContentAsString();
 
+            assertThat(content).isNotNull();
+            ExceptionResponse exceptionResponse = objectMapper.readValue(content, ExceptionResponse.class);
+
+            assertThat(exceptionResponse).isNotNull();
+            assertThat(exceptionResponse.getPath()).isEqualTo("/products/reindex");
+            assertThat(exceptionResponse.getCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
+            assertThat(exceptionResponse.getMessage()).isEqualTo("Resource is unreachable.");
         }
 
         @Test
-        void reindex_shouldReturnConflict_whenReindexingInProgress() {
+        void reindex_shouldReturnConflict_whenAlreadyInProgress() throws Exception {
+            when(productReindexPort.isProcessing()).thenReturn(true);
 
+            String content = mockMvc.perform(post("/products/reindex")
+                            .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.ADMIN.name())))))
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isConflict()).andReturn().getResponse().getContentAsString();
+
+            assertThat(content).isNotNull();
+            ExceptionResponse exceptionResponse = objectMapper.readValue(content, ExceptionResponse.class);
+
+            assertThat(exceptionResponse).isNotNull();
+            assertThat(exceptionResponse.getPath()).isEqualTo("/products/reindex");
+            assertThat(exceptionResponse.getCode()).isEqualTo(HttpStatus.CONFLICT.value());
+            assertThat(exceptionResponse.getMessage()).isEqualTo("Reindexing already in progress.");
+
+            verify(productReindexPort).isProcessing();
+            verify(productReindexPort, never()).reindex(anyList());
+            verify(productQueryPort, never()).getAll(anyString(), anyInt());
         }
-
-        @Test
-        void reindex_shouldFinishReindexing_whenNoProducts() {
-
-        }
-
     }
 }
