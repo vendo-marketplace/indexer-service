@@ -3,6 +3,7 @@ package com.vendo.indexer_service.domain.product;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -16,7 +17,8 @@ public record Product(
         String ownerId,
         String categoryId,
         List<Attribute> attributes,
-        Boolean active
+        Boolean active,
+        Instant createdAt
 ) {
 
     public static Product getLast(List<Product> products) {

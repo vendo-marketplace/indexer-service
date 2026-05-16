@@ -12,6 +12,7 @@ import com.vendo.security_lib.exception.response.ExceptionResponse;
 import com.vendo.user_lib.type.UserRole;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,6 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -61,7 +63,7 @@ public class ProductReindexControllerIntegrationTest {
 
             when(productReindexPort.isProcessing()).thenReturn(false);
             when(productQueryPort.getAll(null, REINDEX_BATCH_SIZE)).thenReturn(List.of(product));
-            when(productQueryPort.getAll(product.id(), REINDEX_BATCH_SIZE)).thenReturn(List.of());
+            when(productQueryPort.getAll(product.createdAt(), REINDEX_BATCH_SIZE)).thenReturn(List.of());
 
             mockMvc.perform(post("/products/reindex")
                             .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.ADMIN.name())))))
@@ -108,7 +110,7 @@ public class ProductReindexControllerIntegrationTest {
 
             verify(productReindexPort).isProcessing();
             verify(productReindexPort, never()).reindex(anyList());
-            verify(productQueryPort, never()).getAll(anyString(), anyInt());
+            verify(productQueryPort, never()).getAll(any(Instant.class), anyInt());
         }
     }
 }

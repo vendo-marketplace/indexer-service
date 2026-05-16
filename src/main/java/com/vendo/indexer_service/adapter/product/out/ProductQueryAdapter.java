@@ -5,6 +5,7 @@ import com.vendo.indexer_service.port.product.ProductQueryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -14,7 +15,7 @@ public class ProductQueryAdapter implements ProductQueryPort {
     private final ProductClient client;
 
     @Override
-    public List<Product> getAll(String cursor, int limit) {
+    public List<Product> getAll(Instant cursor, int limit) {
         return client.getAll(cursor, limit);
     }
 
