@@ -1,5 +1,6 @@
 package com.vendo.indexer_service.adapter.product.in.controller.controller;
 
+import com.vendo.indexer_service.adapter.product.in.controller.controller.validation.ReindexValidator;
 import com.vendo.indexer_service.port.product.index.ProductReindexUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,8 +16,11 @@ public class ProductReindexController {
 
     private final ProductReindexUseCase productReindexUseCase;
 
+    private final ReindexValidator reindexValidator;
+
     @PostMapping("/reindex")
     void reindex() {
+        reindexValidator.validateInProgress();
         productReindexUseCase.reindex();
     }
 

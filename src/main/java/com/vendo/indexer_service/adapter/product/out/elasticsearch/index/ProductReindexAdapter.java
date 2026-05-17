@@ -26,10 +26,7 @@ public class ProductReindexAdapter implements ProductReindexPort {
         if (!reentrantLock.tryLock()) return;
 
         try {
-            Thread.sleep(5_000);
             operations.bulkIndex(toQueries(products), IndexCoordinates.of(PRODUCTS_INDEX));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         } finally {
             reentrantLock.unlock();
         }
