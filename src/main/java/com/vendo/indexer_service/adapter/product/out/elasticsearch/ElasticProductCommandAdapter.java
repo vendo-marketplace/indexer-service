@@ -2,7 +2,7 @@ package com.vendo.indexer_service.adapter.product.out.elasticsearch;
 
 import com.vendo.indexer_service.adapter.product.out.mapper.ElasticProductMapper;
 import com.vendo.indexer_service.domain.product.Product;
-import com.vendo.indexer_service.port.product.ProductIndexCommandPort;
+import com.vendo.indexer_service.port.product.ProductCommandPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ElasticProductCommandAdapter implements ProductIndexCommandPort {
+public class ElasticProductCommandAdapter implements ProductCommandPort {
 
     private final ElasticProductMapper mapper;
 

@@ -1,8 +1,8 @@
 package com.vendo.indexer_service.application.product;
 
 import com.vendo.indexer_service.domain.product.Product;
-import com.vendo.indexer_service.port.product.ProductIndexCommandPort;
-import com.vendo.indexer_service.port.product.ProductIndexUseCase;
+import com.vendo.indexer_service.port.product.ProductCommandPort;
+import com.vendo.indexer_service.port.product.index.ProductIndexUseCase;
 import com.vendo.utils_lib.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ProductIndexService implements ProductIndexUseCase {
 
-    private final ProductIndexCommandPort productIndexCommandPort;
+    private final ProductCommandPort productCommandPort;
 
     @Override
     public void save(Product product) {
@@ -24,7 +24,7 @@ public class ProductIndexService implements ProductIndexUseCase {
             return;
         }
 
-        productIndexCommandPort.save(product);
+        productCommandPort.save(product);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ProductIndexService implements ProductIndexUseCase {
             return;
         }
 
-        productIndexCommandPort.update(id, product);
+        productCommandPort.update(id, product);
     }
 
 }

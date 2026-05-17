@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -39,6 +40,9 @@ public class ElasticProduct {
 
     @Field(type = FieldType.Boolean)
     private Boolean active;
+
+    @Field(type = FieldType.Date)
+    private Instant createdAt;
 
     public record ElasticAttribute(
 
