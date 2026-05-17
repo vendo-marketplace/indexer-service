@@ -1,7 +1,6 @@
 package com.vendo.indexer_service.application.product;
 
 import com.vendo.indexer_service.domain.product.Product;
-import com.vendo.indexer_service.domain.product.exception.ProductAlreadyReindexingException;
 import com.vendo.indexer_service.port.product.ProductQueryPort;
 import com.vendo.indexer_service.port.product.index.ProductReindexPort;
 import com.vendo.indexer_service.port.product.index.ProductReindexUseCase;
@@ -25,6 +24,7 @@ public class ProductReindexService implements ProductReindexUseCase {
     @Async
     @Override
     public void reindex() {
+        if (productReindexPort.isProcessing()) return;
         log.info("Started reindexing products." );
 
         List<Product> products = productQueryPort.getAll(null, REINDEX_BATCH_SIZE);

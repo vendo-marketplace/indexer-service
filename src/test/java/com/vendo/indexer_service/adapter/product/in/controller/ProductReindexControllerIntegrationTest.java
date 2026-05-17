@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
+@ActiveProfiles("test" )
 public class ProductReindexControllerIntegrationTest {
 
     @Autowired
@@ -49,7 +49,7 @@ public class ProductReindexControllerIntegrationTest {
     @MockitoBean
     private ElasticProductRepository repository;
 
-    @Value("${product.reindex.batch-size}")
+    @Value("${product.reindex.batch-size}" )
     private int REINDEX_BATCH_SIZE;
 
     @Nested
@@ -63,7 +63,7 @@ public class ProductReindexControllerIntegrationTest {
             when(productQueryPort.getAll(null, REINDEX_BATCH_SIZE)).thenReturn(List.of(product));
             when(productQueryPort.getAll(product.id(), REINDEX_BATCH_SIZE)).thenReturn(List.of());
 
-            mockMvc.perform(post("/products/reindex")
+            mockMvc.perform(post("/products/reindex" )
                             .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.ADMIN.name())))))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
@@ -75,7 +75,7 @@ public class ProductReindexControllerIntegrationTest {
 
         @Test
         void reindex_shouldReturnUnauthorized_whenUserNotAdmin() throws Exception {
-            String content = mockMvc.perform(post("/products/reindex")
+            String content = mockMvc.perform(post("/products/reindex" )
                             .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.USER.name())))))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isForbidden()).andReturn().getResponse().getContentAsString();
@@ -84,27 +84,19 @@ public class ProductReindexControllerIntegrationTest {
             ExceptionResponse exceptionResponse = objectMapper.readValue(content, ExceptionResponse.class);
 
             assertThat(exceptionResponse).isNotNull();
-            assertThat(exceptionResponse.getPath()).isEqualTo("/products/reindex");
+            assertThat(exceptionResponse.getPath()).isEqualTo("/products/reindex" );
             assertThat(exceptionResponse.getCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
-            assertThat(exceptionResponse.getMessage()).isEqualTo("Resource is unreachable.");
+            assertThat(exceptionResponse.getMessage()).isEqualTo("Resource is unreachable." );
         }
 
         @Test
-        void reindex_shouldReturnConflict_whenAlreadyInProgress() throws Exception {
+        void reindex_shouldDoNothing_whenAlreadyInProgress() throws Exception {
             when(productReindexPort.isProcessing()).thenReturn(true);
 
-            String content = mockMvc.perform(post("/products/reindex")
+            mockMvc.perform(post("/products/reindex" )
                             .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.ADMIN.name())))))
                             .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isConflict()).andReturn().getResponse().getContentAsString();
-
-            assertThat(content).isNotNull();
-            ExceptionResponse exceptionResponse = objectMapper.readValue(content, ExceptionResponse.class);
-
-            assertThat(exceptionResponse).isNotNull();
-            assertThat(exceptionResponse.getPath()).isEqualTo("/products/reindex");
-            assertThat(exceptionResponse.getCode()).isEqualTo(HttpStatus.CONFLICT.value());
-            assertThat(exceptionResponse.getMessage()).isEqualTo("Reindexing already in progress.");
+                    .andExpect(status().isOk());
 
             verify(productReindexPort).isProcessing();
             verify(productReindexPort, never()).reindex(anyList());
