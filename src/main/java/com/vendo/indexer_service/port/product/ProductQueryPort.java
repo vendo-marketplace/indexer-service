@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ProductQueryPort {
 
-    List<Product> getAll(@Nullable Instant cursor, int limit);
+    List<Product> getAll(@Nullable String cursor, int limit);
 
 }
