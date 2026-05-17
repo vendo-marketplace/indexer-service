@@ -25,16 +25,15 @@ public class ProductReindexService implements ProductReindexUseCase {
     @Async
     @Override
     public void reindex() {
-        if (productReindexPort.isProcessing()) throw new ProductAlreadyReindexingException("Reindexing already in progress.");
-        log.info("Started reindexing products.");
+        if (productReindexPort.isProcessing()) throw new ProductAlreadyReindexingException("Reindexing already in progress." );
+        log.info("Started reindexing products." );
 
         List<Product> products = productQueryPort.getAll(null, REINDEX_BATCH_SIZE);
         while (!products.isEmpty()) {
-            log.info("Retrieved {} products.", products.size());
             productReindexPort.reindex(products);
             products = productQueryPort.getAll(Product.getLast(products).id(), REINDEX_BATCH_SIZE);
         }
 
-        log.info("Successfully finished reindexing.");
+        log.info("Successfully finished reindexing." );
     }
 }
