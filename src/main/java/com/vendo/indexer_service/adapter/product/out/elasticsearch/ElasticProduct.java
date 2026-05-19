@@ -1,5 +1,6 @@
 package com.vendo.indexer_service.adapter.product.out.elasticsearch;
 
+import com.vendo.indexer_service.adapter.product.out.elasticsearch.nested.ElasticAttribute;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Data
 @Document(indexName = "products")
-public class ElasticProduct {
+public final class ElasticProduct {
 
     @Id
     private String id;
@@ -43,16 +44,5 @@ public class ElasticProduct {
 
     @Field(type = FieldType.Date)
     private Instant createdAt;
-
-    public record ElasticAttribute(
-
-            @Field(type = FieldType.Keyword)
-            String id,
-
-            @Field(type = FieldType.Keyword)
-            List<String> values
-
-    ) {
-    }
 
 }
