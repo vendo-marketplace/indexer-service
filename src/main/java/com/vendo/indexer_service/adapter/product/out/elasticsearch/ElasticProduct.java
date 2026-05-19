@@ -43,7 +43,7 @@ public final class ElasticProduct {
     @Field(type = FieldType.Boolean)
     private Boolean active;
 
-    @Field(type = FieldType.Date, pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSZZ")
+    @Field(type = FieldType.Date)
     private Instant createdAt;
 
 }
