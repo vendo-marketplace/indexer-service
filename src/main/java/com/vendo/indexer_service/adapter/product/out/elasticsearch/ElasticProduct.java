@@ -3,13 +3,12 @@ package com.vendo.indexer_service.adapter.product.out.elasticsearch;
 import com.vendo.indexer_service.adapter.product.out.elasticsearch.nested.ElasticAttribute;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -43,7 +42,7 @@ public final class ElasticProduct {
     @Field(type = FieldType.Boolean)
     private Boolean active;
 
-    @Field(type = FieldType.Date, format = DateFormat.date_time)
-    private Instant createdAt;
+    @Field(type = FieldType.Date)
+    private LocalDateTime createdAt;
 
 }
