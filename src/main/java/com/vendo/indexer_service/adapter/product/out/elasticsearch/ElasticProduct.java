@@ -43,7 +43,7 @@ public final class ElasticProduct {
     @Field(type = FieldType.Boolean)
     private Boolean active;
 
-    @Field(type = FieldType.Date, format = DateFormat.strict_date_time)
+    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second_millis)
     private LocalDateTime createdAt;
 
 }
