@@ -1,10 +1,10 @@
 package com.vendo.indexer_service.adapter.security.in.filter;
 
+import com.vendo.indexer_service.domain.user.User;
 import com.vendo.security_lib.type.AuthHeader;
 import com.vendo.security_starter.filter.header.HeaderExtractor;
 import com.vendo.security_starter.filter.header.UserHeaderExtractor;
 import com.vendo.security_starter.filter.utils.FilterUtils;
-import com.vendo.user_lib.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

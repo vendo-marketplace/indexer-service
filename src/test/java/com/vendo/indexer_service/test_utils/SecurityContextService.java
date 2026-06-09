@@ -1,6 +1,6 @@
 package com.vendo.indexer_service.test_utils;
 
-import com.vendo.user_lib.model.User;
+import com.vendo.indexer_service.domain.user.User;
 import com.vendo.user_lib.type.UserRole;
 import com.vendo.user_lib.type.UserStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
