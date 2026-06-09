@@ -43,6 +43,6 @@ kafka:
           auto-offset-reset: "latest"
 
 endpoints:
-  protected:
+  unauthenticated:
     general:
       - /actuator/health
