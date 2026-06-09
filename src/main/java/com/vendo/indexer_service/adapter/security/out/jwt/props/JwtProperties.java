@@ -13,6 +13,10 @@ public class JwtProperties {
 
     private Secret secret;
 
+    private Internal internal;
+
     public record Secret(String key) { }
+
+    public record Internal(String key, long expirationTime) { }
 
 }

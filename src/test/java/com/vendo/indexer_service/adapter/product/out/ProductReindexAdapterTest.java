@@ -1,14 +1,12 @@
 package com.vendo.indexer_service.adapter.product.out;
 
 import com.vendo.indexer_service.adapter.product.out.elasticsearch.index.ProductReindexAdapter;
+import com.vendo.indexer_service.adapter.product.out.mapper.ElasticProductMapper;
 import com.vendo.indexer_service.domain.product.Product;
 import com.vendo.indexer_service.test_utils.builder.ProductDataBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -26,6 +24,10 @@ public class ProductReindexAdapterTest {
 
     @Captor
     ArgumentCaptor<List<IndexQuery>> captor;
+
+    @Spy
+    private ElasticProductMapper elasticProductMapper;
+
     @Mock
     private ElasticsearchOperations operations;
     @InjectMocks

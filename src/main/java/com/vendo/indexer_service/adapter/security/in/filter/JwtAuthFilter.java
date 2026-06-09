@@ -1,7 +1,10 @@
 package com.vendo.indexer_service.adapter.security.in.filter;
 
-import com.vendo.indexer_service.adapter.security.out.jwt.parser.TokenClaims;
-import com.vendo.indexer_service.adapter.security.out.jwt.parser.TokenClaimsParser;
+import com.vendo.security_lib.type.AuthHeader;
+import com.vendo.security_starter.filter.header.HeaderExtractor;
+import com.vendo.security_starter.filter.header.UserHeaderExtractor;
+import com.vendo.security_starter.filter.utils.FilterUtils;
+import com.vendo.user_lib.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,10 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,20 +20,18 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static com.vendo.security_lib.constants.AuthConstants.AUTHORIZATION_HEADER;
-import static com.vendo.security_lib.constants.AuthConstants.BEARER_PREFIX;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final TokenClaimsParser claimsParser;
-
+    private final HeaderExtractor headerExtractor;
+    private final UserHeaderExtractor userHeaderExtractor;
     private final IndexerAntPathResolver indexerAntPathResolver;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
         SecurityContext securityContext = SecurityContextHolder.getContext();
         if (securityContext.getAuthentication() != null) {
             filterChain.doFilter(request, response);
@@ -41,9 +39,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         try {
-            String jwtToken = getTokenFromRequest(request);
-            TokenClaims claims = claimsParser.extract(jwtToken);
-            addAuthenticationToContext(claims);
+            User user = parseUserFrom(request);
+            FilterUtils.addAuthToContext(user, user.toRoleNames());
         } catch (AuthenticationException e) {
             SecurityContextHolder.clearContext();
             throw e;
@@ -55,27 +52,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    private User parseUserFrom(HttpServletRequest request) {
+        String id = headerExtractor.require(AuthHeader.ID.getHeader(), request);
+        String email = request.getHeader(AuthHeader.EMAIL.getHeader());
+        String emailVerified = request.getHeader(AuthHeader.EMAIL_VERIFIED.getHeader());
+
+        return User.builder()
+                .id(id)
+                .email(email)
+                .status(userHeaderExtractor.extractStatus(request))
+                .roles(userHeaderExtractor.extractRoles(request))
+                .emailVerified(Boolean.parseBoolean(emailVerified))
+                .build();
+    }
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
         return indexerAntPathResolver.isPermittedPath(requestURI);
-    }
-
-    private String getTokenFromRequest(HttpServletRequest request) {
-        String authorization = request.getHeader(AUTHORIZATION_HEADER);
-
-        if (authorization != null && authorization.startsWith(BEARER_PREFIX)) {
-            return authorization.substring(BEARER_PREFIX.length());
-        }
-
-        log.error("Exception while extracting token from request.");
-        throw new BadCredentialsException("Invalid token.");
-    }
-
-    private void addAuthenticationToContext(TokenClaims claims) {
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(claims.userId(), null, claims.roles().stream().map(SimpleGrantedAuthority::new).toList());
-
-        SecurityContextHolder.getContext().setAuthentication(authToken);
     }
 }

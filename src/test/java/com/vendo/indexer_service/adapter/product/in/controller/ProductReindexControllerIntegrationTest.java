@@ -2,7 +2,6 @@ package com.vendo.indexer_service.adapter.product.in.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendo.indexer_service.adapter.product.out.elasticsearch.ElasticProductRepository;
-import com.vendo.indexer_service.adapter.security.out.jwt.parser.TokenClaims;
 import com.vendo.indexer_service.domain.product.Product;
 import com.vendo.indexer_service.port.product.ProductQueryPort;
 import com.vendo.indexer_service.port.product.index.ProductReindexPort;
@@ -64,7 +63,7 @@ public class ProductReindexControllerIntegrationTest {
             when(productQueryPort.getAll(product.id(), REINDEX_BATCH_SIZE)).thenReturn(List.of());
 
             mockMvc.perform(post("/products/reindex" )
-                            .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.ADMIN.name())))))
+                            .with(authentication(SecurityContextService.initializeAuth(UserRole.ADMIN)))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
@@ -76,7 +75,7 @@ public class ProductReindexControllerIntegrationTest {
         @Test
         void reindex_shouldReturnUnauthorized_whenUserNotAdmin() throws Exception {
             String content = mockMvc.perform(post("/products/reindex" )
-                            .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.USER.name())))))
+                            .with(authentication(SecurityContextService.initializeAuth(UserRole.USER)))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isForbidden()).andReturn().getResponse().getContentAsString();
 
@@ -94,7 +93,7 @@ public class ProductReindexControllerIntegrationTest {
             when(productReindexPort.isProcessing()).thenReturn(true);
 
             mockMvc.perform(post("/products/reindex" )
-                            .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.ADMIN.name())))))
+                            .with(authentication(SecurityContextService.initializeAuth(UserRole.ADMIN)))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
