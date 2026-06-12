@@ -1,6 +1,5 @@
 package com.vendo.indexer_service.adapter.product.out.exception;
 
-import com.vendo.core_lib.exception.InternalServerException;
 import com.vendo.core_lib.type.ServiceName;
 import feign.Response;
 import feign.codec.ErrorDecoder;
@@ -20,7 +19,7 @@ public class ProductServiceErrorDecoder implements ErrorDecoder {
         }
 
         log.error(response.toString());
-        return new InternalServerException("Internal server error.");
+        return new IllegalArgumentException("Unhandled product exception.");
     }
 
 }

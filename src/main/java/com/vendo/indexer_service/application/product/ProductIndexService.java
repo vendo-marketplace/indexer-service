@@ -1,9 +1,9 @@
 package com.vendo.indexer_service.application.product;
 
+import com.vendo.core_lib.utils.StringUtils;
 import com.vendo.indexer_service.domain.product.Product;
 import com.vendo.indexer_service.port.product.ProductCommandPort;
 import com.vendo.indexer_service.port.product.index.ProductIndexUseCase;
-import com.vendo.utils_lib.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,14 @@
 server:
   url: localhost
 
+security:
+  jwt:
+    secret:
+      key: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
+    internal:
+      key: internalinternalinternalinternalinternalinternalinternalinternalinternal
+      expiration-time: 10000
+
 spring:
   cloud:
     discovery:
@@ -34,3 +42,7 @@ kafka:
         properties:
           auto-offset-reset: "latest"
 
+endpoints:
+  unauthenticated:
+    general:
+      - /actuator/health

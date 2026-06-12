@@ -2,7 +2,6 @@ package com.vendo.indexer_service.adapter.product.in.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendo.indexer_service.adapter.product.out.elasticsearch.ElasticProductRepository;
-import com.vendo.indexer_service.adapter.security.out.jwt.parser.TokenClaims;
 import com.vendo.indexer_service.domain.product.Product;
 import com.vendo.indexer_service.port.product.ProductQueryPort;
 import com.vendo.indexer_service.port.product.index.ProductReindexPort;
@@ -63,8 +62,8 @@ public class ProductReindexControllerIntegrationTest {
             when(productQueryPort.getAll(null, REINDEX_BATCH_SIZE)).thenReturn(List.of(product));
             when(productQueryPort.getAll(product.id(), REINDEX_BATCH_SIZE)).thenReturn(List.of());
 
-            mockMvc.perform(post("/products/reindex" )
-                            .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.ADMIN.name())))))
+            mockMvc.perform(post("/indices/reindex" )
+                            .with(authentication(SecurityContextService.initializeAuth(UserRole.ADMIN)))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
@@ -75,8 +74,8 @@ public class ProductReindexControllerIntegrationTest {
 
         @Test
         void reindex_shouldReturnUnauthorized_whenUserNotAdmin() throws Exception {
-            String content = mockMvc.perform(post("/products/reindex" )
-                            .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.USER.name())))))
+            String content = mockMvc.perform(post("/indices/reindex" )
+                            .with(authentication(SecurityContextService.initializeAuth(UserRole.USER)))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isForbidden()).andReturn().getResponse().getContentAsString();
 
@@ -84,7 +83,7 @@ public class ProductReindexControllerIntegrationTest {
             ExceptionResponse exceptionResponse = objectMapper.readValue(content, ExceptionResponse.class);
 
             assertThat(exceptionResponse).isNotNull();
-            assertThat(exceptionResponse.getPath()).isEqualTo("/products/reindex" );
+            assertThat(exceptionResponse.getPath()).isEqualTo("/indices/reindex" );
             assertThat(exceptionResponse.getCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
             assertThat(exceptionResponse.getMessage()).isEqualTo("Resource is unreachable." );
         }
@@ -93,8 +92,8 @@ public class ProductReindexControllerIntegrationTest {
         void reindex_shouldDoNothing_whenAlreadyInProgress() throws Exception {
             when(productReindexPort.isProcessing()).thenReturn(true);
 
-            mockMvc.perform(post("/products/reindex" )
-                            .with(authentication(SecurityContextService.initializeAuth(new TokenClaims("id", List.of(UserRole.ADMIN.name())))))
+            mockMvc.perform(post("/indices/reindex" )
+                            .with(authentication(SecurityContextService.initializeAuth(UserRole.ADMIN)))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
 
