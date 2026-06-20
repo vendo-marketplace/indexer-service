@@ -19,6 +19,7 @@ public class ProductRequestInterceptor {
     @Bean
     RequestInterceptor internalProductInfoInterceptor() {
         String token = internalGenerationPort.generate(ServiceName.PRODUCT_SERVICE);
+        System.out.println(token);
         return request -> request.header(AUTHORIZATION_HEADER, BEARER_PREFIX + token);
     }
 
