@@ -25,7 +25,7 @@ public class JwtInternalService implements InternalGenerationPort {
         JwtPayload jwtPayload = JwtPayload.builder()
                 .subject(ServiceName.INDEXER_SERVICE.getServiceName())
                 .claims(Map.of(TokenClaim.ROLES.getClaim(), ServiceRole.INTERNAL.name()))
-                .audience(Set.of(ServiceRole.INTERNAL.name()))
+                .audience(Set.of(ServiceName.PRODUCT_SERVICE.name()))
                 .expiration(internal.expirationTime())
                 .build();
 
