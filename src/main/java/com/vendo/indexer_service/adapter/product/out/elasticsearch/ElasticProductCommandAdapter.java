@@ -6,7 +6,6 @@ import com.vendo.indexer_service.port.product.ProductCommandPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -25,7 +24,6 @@ public class ElasticProductCommandAdapter implements ProductCommandPort {
     }
 
     @Override
-    @Transactional
     public void update(String id, Product product) {
         Optional<ElasticProduct> entityOpt = repository.findById(id);
         if (entityOpt.isEmpty()) {
