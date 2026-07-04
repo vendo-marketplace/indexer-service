@@ -18,7 +18,11 @@ public class ProductIndexInitializer {
 
     @EventListener(ApplicationStartedEvent.class)
     public void init() {
+        log.info("Class started.");
         IndexOperations indexOps = operations.indexOps(ElasticProduct.class);
+
+        log.info(indexOps.toString());
+        log.info(String.valueOf(indexOps.exists()));
 
         if (!indexOps.exists()) {
             log.info("Initializing product index.");
