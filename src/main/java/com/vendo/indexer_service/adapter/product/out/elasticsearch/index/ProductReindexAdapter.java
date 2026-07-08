@@ -25,7 +25,9 @@ class ProductReindexAdapter implements ProductReindexPort {
 
     @Override
     public void reindex(List<Product> products) {
-        if (!reentrantLock.tryLock()) return;
+        if (!reentrantLock.tryLock()) {
+            return;
+        }
 
         try {
             operations.bulkIndex(toQueries(products), IndexCoordinates.of(PRODUCTS_INDEX));

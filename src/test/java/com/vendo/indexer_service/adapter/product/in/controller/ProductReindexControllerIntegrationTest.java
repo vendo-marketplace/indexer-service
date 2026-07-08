@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vendo.indexer_service.adapter.product.out.elasticsearch.ElasticProductRepository;
 import com.vendo.indexer_service.domain.product.Product;
 import com.vendo.indexer_service.port.product.ProductQueryPort;
+import com.vendo.indexer_service.port.product.index.ProductIndexPort;
 import com.vendo.indexer_service.port.product.index.ProductReindexPort;
 import com.vendo.indexer_service.test_utils.SecurityContextService;
 import com.vendo.indexer_service.test_utils.builder.ProductDataBuilder;
@@ -33,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test" )
+@ActiveProfiles("test")
 public class ProductReindexControllerIntegrationTest {
 
     @Autowired
@@ -47,8 +48,10 @@ public class ProductReindexControllerIntegrationTest {
     private ProductQueryPort productQueryPort;
     @MockitoBean
     private ElasticProductRepository repository;
+    @MockitoBean
+    private ProductIndexPort productIndexPort;
 
-    @Value("${product.reindex.batch-size}" )
+    @Value("${product.reindex.batch-size}")
     private int REINDEX_BATCH_SIZE;
 
     @Nested
@@ -62,7 +65,7 @@ public class ProductReindexControllerIntegrationTest {
             when(productQueryPort.getAll(null, REINDEX_BATCH_SIZE)).thenReturn(List.of(product));
             when(productQueryPort.getAll(product.id(), REINDEX_BATCH_SIZE)).thenReturn(List.of());
 
-            mockMvc.perform(post("/indices/reindex" )
+            mockMvc.perform(post("/indices/reindex")
                             .with(authentication(SecurityContextService.initializeAuth(UserRole.ADMIN)))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
@@ -85,14 +88,14 @@ public class ProductReindexControllerIntegrationTest {
             assertThat(exceptionResponse).isNotNull();
             assertThat(exceptionResponse.getPath()).isEqualTo("/indices/reindex" );
             assertThat(exceptionResponse.getCode()).isEqualTo(HttpStatus.FORBIDDEN.value());
-            assertThat(exceptionResponse.getMessage()).isEqualTo("Resource is unreachable." );
+            assertThat(exceptionResponse.getMessage()).isEqualTo("Resource is unreachable.");
         }
 
         @Test
         void reindex_shouldDoNothing_whenAlreadyInProgress() throws Exception {
             when(productReindexPort.isProcessing()).thenReturn(true);
 
-            mockMvc.perform(post("/indices/reindex" )
+            mockMvc.perform(post("/indices/reindex")
                             .with(authentication(SecurityContextService.initializeAuth(UserRole.ADMIN)))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
