@@ -1,4 +1,4 @@
-package com.vendo.indexer_service.infrastructure.products;
+package com.vendo.indexer_service.infrastructure.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

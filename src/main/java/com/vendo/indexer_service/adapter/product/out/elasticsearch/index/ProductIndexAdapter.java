@@ -1,30 +1,28 @@
 package com.vendo.indexer_service.adapter.product.out.elasticsearch.index;
 
 import com.vendo.indexer_service.adapter.product.out.elasticsearch.ElasticProduct;
+import com.vendo.indexer_service.port.product.index.ProductIndexPort;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.IndexOperations;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Slf4j
-@Component
+@Service
 @RequiredArgsConstructor
-public class ProductIndexInitializer {
+public class ProductIndexAdapter implements ProductIndexPort {
 
     private final ElasticsearchOperations operations;
 
-    @EventListener(ApplicationStartedEvent.class)
-    public void init() {
+    @Override
+    public boolean exists() {
         IndexOperations indexOps = operations.indexOps(ElasticProduct.class);
-
-        if (!indexOps.exists()) {
-            log.info("Initializing product index.");
-            indexOps.create();
-            indexOps.putMapping();
-        }
+        return indexOps.exists();
     }
 
+    @Override
+    public void create() {
+        IndexOperations indexOps = operations.indexOps(ElasticProduct.class);
+        indexOps.create();
+        indexOps.putMapping();
+    }
 }

@@ -1,4 +1,4 @@
-package com.vendo.indexer_service.infrastructure.discovery;
+package com.vendo.indexer_service.infrastructure.config;
 
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Configuration;

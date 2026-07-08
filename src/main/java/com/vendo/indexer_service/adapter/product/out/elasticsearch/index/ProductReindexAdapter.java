@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 @RequiredArgsConstructor
-public class ProductReindexAdapter implements ProductReindexPort {
+class ProductReindexAdapter implements ProductReindexPort {
 
     private static final String PRODUCTS_INDEX = "products";
 
@@ -25,7 +25,9 @@ public class ProductReindexAdapter implements ProductReindexPort {
 
     @Override
     public void reindex(List<Product> products) {
-        if (!reentrantLock.tryLock()) return;
+        if (!reentrantLock.tryLock()) {
+            return;
+        }
 
         try {
             operations.bulkIndex(toQueries(products), IndexCoordinates.of(PRODUCTS_INDEX));

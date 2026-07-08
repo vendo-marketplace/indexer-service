@@ -1,4 +1,4 @@
-package com.vendo.indexer_service.infrastructure.async;
+package com.vendo.indexer_service.infrastructure.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
