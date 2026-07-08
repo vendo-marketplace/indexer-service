@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 @RequiredArgsConstructor
-public class ProductReindexAdapter implements ProductReindexPort {
+class ProductReindexAdapter implements ProductReindexPort {
 
     private static final String PRODUCTS_INDEX = "products";
 

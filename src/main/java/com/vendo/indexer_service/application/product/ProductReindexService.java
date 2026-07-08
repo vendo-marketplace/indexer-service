@@ -27,12 +27,15 @@ public class ProductReindexService implements ProductReindexUseCase {
         if (productReindexPort.isProcessing()) return;
         log.info("Started reindexing products." );
 
+        reindexWithBatch();
+        log.info("Successfully finished reindexing." );
+    }
+
+    private void reindexWithBatch() {
         List<Product> products = productQueryPort.getAll(null, REINDEX_BATCH_SIZE);
         while (!products.isEmpty()) {
             productReindexPort.reindex(products);
             products = productQueryPort.getAll(Product.getLast(products).id(), REINDEX_BATCH_SIZE);
         }
-
-        log.info("Successfully finished reindexing." );
     }
 }

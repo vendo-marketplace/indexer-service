@@ -1,4 +1,4 @@
-package com.vendo.indexer_service.infrastructure.kafka;
+package com.vendo.indexer_service.infrastructure.config;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.StringDeserializer;
