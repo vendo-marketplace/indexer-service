@@ -17,6 +17,7 @@ public class ProductIndexAspect {
 
     @Before("execution(* com.vendo.indexer_service.application.product.*(..))")
     public void ensureIndexCreation() {
+        log.info("Aspect works.");
         if (!productIndexPort.exists()) {
             log.info("Product index doesn't exist. Creating.");
             productIndexPort.create();
