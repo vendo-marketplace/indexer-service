@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProductReindexService implements ProductReindexUseCase {
+class ProductReindexService implements ProductReindexUseCase {
 
     private final ProductQueryPort productQueryPort;
     private final ProductReindexPort productReindexPort;

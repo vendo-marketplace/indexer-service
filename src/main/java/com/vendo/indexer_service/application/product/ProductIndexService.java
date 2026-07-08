@@ -13,7 +13,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProductIndexService implements ProductIndexUseCase {
+class ProductIndexService implements ProductIndexUseCase {
 
     private final ProductCommandPort productCommandPort;
 
