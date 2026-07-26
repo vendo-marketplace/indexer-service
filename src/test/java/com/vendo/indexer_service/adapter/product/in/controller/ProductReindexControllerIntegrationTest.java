@@ -8,7 +8,7 @@ import com.vendo.indexer_service.port.product.index.ProductIndexPort;
 import com.vendo.indexer_service.port.product.index.ProductReindexPort;
 import com.vendo.indexer_service.test_utils.SecurityContextService;
 import com.vendo.indexer_service.test_utils.builder.ProductDataBuilder;
-import com.vendo.security_lib.exception.response.ExceptionResponse;
+import com.vendo.security_lib.exception.ExceptionResponse;
 import com.vendo.user_lib.type.UserRole;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

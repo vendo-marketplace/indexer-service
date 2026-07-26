@@ -5,6 +5,7 @@ import com.vendo.indexer_service.domain.product.Product;
 import com.vendo.indexer_service.port.product.ProductCommandPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -14,8 +15,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ElasticProductCommandAdapter implements ProductCommandPort {
 
-    private final ElasticProductMapper mapper;
+    @Value("${aws.base-url}")
+    private String BASE_URL;
 
+    private final ElasticProductMapper mapper;
     private final ElasticProductRepository repository;
 
     @Override
@@ -32,7 +35,7 @@ public class ElasticProductCommandAdapter implements ProductCommandPort {
         }
 
         ElasticProduct entity = entityOpt.get();
-        mapper.updateEntity(entity, product);
+        mapper.updateEntity(entity, product, BASE_URL);
         repository.save(entity);
     }
 }
