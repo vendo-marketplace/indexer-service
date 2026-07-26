@@ -3,10 +3,9 @@ package com.vendo.indexer_service.adapter.product.out.mapper;
 import com.vendo.indexer_service.adapter.product.out.elasticsearch.ElasticProduct;
 import com.vendo.indexer_service.domain.product.Product;
 import com.vendo.indexer_service.infrastructure.config.MapStructConfig;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
+
+import java.util.List;
 
 @Mapper(config = MapStructConfig.class)
 public interface ElasticProductMapper {
@@ -14,6 +13,21 @@ public interface ElasticProductMapper {
     ElasticProduct toEntity(Product product);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntity(@MappingTarget ElasticProduct entity, Product product);
+    @Mapping(target = "imageUrls", source = "imageKeys", qualifiedByName = "buildUrls")
+    void updateEntity(
+            @MappingTarget ElasticProduct entity,
+            Product product,
+            @Context String baseUrl
+    );
 
+    @Named("buildUrls")
+    default List<String> buildUrls(List<String> imageKeys, @Context String baseUrl) {
+        if (imageKeys == null) {
+            return null;
+        }
+
+        return imageKeys.stream()
+                .map(key -> baseUrl + key)
+                .toList();
+    }
 }

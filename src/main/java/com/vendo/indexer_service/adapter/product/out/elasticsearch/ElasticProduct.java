@@ -40,6 +40,9 @@ public final class ElasticProduct {
     @Field(type = FieldType.Nested)
     private List<ElasticAttribute> attributes;
 
+    @Field(type = FieldType.Keyword)
+    private List<String> imageUrls;
+
     @Field(type = FieldType.Boolean)
     private Boolean active;
 

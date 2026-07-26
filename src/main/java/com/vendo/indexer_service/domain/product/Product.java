@@ -17,6 +17,7 @@ public record Product(
         String ownerId,
         String categoryId,
         List<Attribute> attributes,
+        List<String> imageKeys,
         Boolean active,
         Instant createdAt
 ) {
