@@ -12,6 +12,9 @@ public interface ElasticProductMapper {
 
     ElasticProduct toEntity(Product product);
 
+    @Mapping(target = "imageUrls", source = "imageKeys", qualifiedByName = "buildUrls")
+    ElasticProduct toEntity(Product product, @Context String baseUrl);
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "imageUrls", source = "imageKeys", qualifiedByName = "buildUrls")
     void updateEntity(
