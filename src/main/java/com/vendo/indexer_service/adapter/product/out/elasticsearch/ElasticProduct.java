@@ -41,7 +41,7 @@ public final class ElasticProduct {
     private List<ElasticAttribute> attributes;
 
     @Field(type = FieldType.Keyword)
-    private List<String> imageUrls;
+    private List<String> images;
 
     @Field(type = FieldType.Boolean)
     private Boolean active;
