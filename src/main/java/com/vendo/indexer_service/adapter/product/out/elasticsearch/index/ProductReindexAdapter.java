@@ -46,6 +46,9 @@ class ProductReindexAdapter implements ProductReindexPort {
     }
 
     private List<IndexQuery> toQueries(List<Product> products) {
+        System.out.println(products);
+        System.out.println(BASE_URL);
+        System.out.println(elasticProductMapper.toEntity(products.get(0), BASE_URL));
         return products.stream()
                 .map(product -> new IndexQueryBuilder().withId(product.id()).withObject(elasticProductMapper.toEntity(product, BASE_URL)).build())
                 .toList();
