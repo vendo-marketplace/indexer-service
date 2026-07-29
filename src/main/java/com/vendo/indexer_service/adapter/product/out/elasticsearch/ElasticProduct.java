@@ -28,6 +28,9 @@ public final class ElasticProduct {
     @Field(type = FieldType.Integer)
     private Integer quantity;
 
+    @Field(type = FieldType.Boolean)
+    private Boolean isNew;
+
     @Field(type = FieldType.Double)
     private BigDecimal price;
 

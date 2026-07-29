@@ -13,6 +13,7 @@ public record Product(
         String title,
         String description,
         Integer quantity,
+        Boolean isNew,
         BigDecimal price,
         String ownerId,
         String categoryId,
