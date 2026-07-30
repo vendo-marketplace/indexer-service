@@ -33,6 +33,7 @@ class ProductReindexService implements ProductReindexUseCase {
 
     private void reindexWithBatch() {
         List<Product> products = productQueryPort.getAll(null, REINDEX_BATCH_SIZE);
+        System.out.println("Products " + products);
         while (!products.isEmpty()) {
             productReindexPort.reindex(products);
             products = productQueryPort.getAll(Product.getLast(products).id(), REINDEX_BATCH_SIZE);

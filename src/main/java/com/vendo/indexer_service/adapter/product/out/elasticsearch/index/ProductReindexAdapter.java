@@ -1,5 +1,6 @@
 package com.vendo.indexer_service.adapter.product.out.elasticsearch.index;
 
+import com.vendo.indexer_service.adapter.product.out.elasticsearch.ElasticProduct;
 import com.vendo.indexer_service.adapter.product.out.mapper.ElasticProductMapper;
 import com.vendo.indexer_service.domain.product.Product;
 import com.vendo.indexer_service.port.product.index.ProductReindexPort;
@@ -31,6 +32,11 @@ class ProductReindexAdapter implements ProductReindexPort {
     public void reindex(List<Product> products) {
         if (!reentrantLock.tryLock()) {
             return;
+        }
+
+        for (Product product : products) {
+            ElasticProduct entity = elasticProductMapper.toEntity(product, BASE_URL);
+            System.out.println("Mapped " + entity);
         }
 
         try {
