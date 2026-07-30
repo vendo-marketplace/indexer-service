@@ -1,7 +1,9 @@
 package com.vendo.indexer_service.adapter.product.out.mapper;
 
 import com.vendo.indexer_service.adapter.product.out.elasticsearch.ElasticProduct;
+import com.vendo.indexer_service.adapter.product.out.elasticsearch.nested.ElasticAddress;
 import com.vendo.indexer_service.domain.product.Product;
+import com.vendo.indexer_service.domain.product.nested.Address;
 import com.vendo.indexer_service.infrastructure.config.MapStructConfig;
 import org.mapstruct.*;
 
@@ -22,6 +24,8 @@ public interface ElasticProductMapper {
             Product product,
             @Context String baseUrl
     );
+
+    ElasticAddress toEntity(Address address);
 
     @Named("buildUrls")
     default List<String> buildUrls(List<String> imageKeys, @Context String baseUrl) {

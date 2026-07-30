@@ -1,5 +1,6 @@
 package com.vendo.indexer_service.domain.product;
 
+import com.vendo.indexer_service.domain.product.nested.Address;
 import lombok.Builder;
 
 import java.math.BigDecimal;
@@ -10,16 +11,21 @@ import java.util.NoSuchElementException;
 @Builder
 public record Product(
         String id,
+
         String title,
         String description,
         Integer quantity,
-        Boolean isNew,
         BigDecimal price,
-        String ownerId,
-        String categoryId,
         List<Attribute> attributes,
         List<String> imageKeys,
+        Address address,
+
+        String ownerId,
+        String categoryId,
+
+        Boolean isNew,
         Boolean active,
+
         Instant createdAt
 ) {
 
