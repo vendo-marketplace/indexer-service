@@ -35,10 +35,7 @@ class ProductReindexAdapter implements ProductReindexPort {
         }
 
         try {
-            List<IndexedObjectInformation> indexedObjectInformations = operations.bulkIndex(toQueries(products), IndexCoordinates.of(PRODUCTS_INDEX));
-            for (IndexedObjectInformation indexedObjectInformation : indexedObjectInformations) {
-                System.out.println(indexedObjectInformation);
-            }
+            operations.bulkIndex(toQueries(products), IndexCoordinates.of(PRODUCTS_INDEX));
         } finally {
             reentrantLock.unlock();
         }
