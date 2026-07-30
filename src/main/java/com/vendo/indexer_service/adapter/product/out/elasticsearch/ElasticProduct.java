@@ -1,5 +1,6 @@
 package com.vendo.indexer_service.adapter.product.out.elasticsearch;
 
+import com.vendo.indexer_service.adapter.product.out.elasticsearch.nested.ElasticAddress;
 import com.vendo.indexer_service.adapter.product.out.elasticsearch.nested.ElasticAttribute;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -21,33 +22,29 @@ public final class ElasticProduct {
 
     @Field(type = FieldType.Text)
     private String title;
-
     @Field(type = FieldType.Text)
     private String description;
-
     @Field(type = FieldType.Integer)
     private Integer quantity;
-
-    @Field(type = FieldType.Boolean)
-    private Boolean isNew;
-
     @Field(type = FieldType.Double)
     private BigDecimal price;
-
-    @Field(type = FieldType.Keyword)
-    private String ownerId;
-
-    @Field(type = FieldType.Keyword)
-    private String categoryId;
-
     @Field(type = FieldType.Nested)
     private List<ElasticAttribute> attributes;
-
     @Field(type = FieldType.Keyword)
     private List<String> images;
+    @Field(type = FieldType.Object)
+    private ElasticAddress address;
 
     @Field(type = FieldType.Boolean)
     private Boolean active;
+    @Field(type = FieldType.Boolean)
+    private Boolean isNew;
+
+    @Field(type = FieldType.Keyword)
+    private String ownerId;
+    @Field(type = FieldType.Keyword)
+    private String categoryId;
+
 
     @Field(type = FieldType.Date, format = DateFormat.date_time)
     private Instant createdAt;
