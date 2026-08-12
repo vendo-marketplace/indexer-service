@@ -168,13 +168,7 @@ java -jar target/product-service.jar
 Swagger UI:
 
 ```
-http://localhost:8090/swagger-ui.html
-```
-
-OpenAPI specification:
-
-```
-http://localhost:8090/v3/api-docs
+http://194.163.130.14:8030/swagger-ui/index.html
 ```
 
 ---
