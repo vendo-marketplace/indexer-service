@@ -45,7 +45,11 @@ public final class ElasticProduct {
     private String categoryId;
 
 
-    @Field(type = FieldType.Date)
+    @Field(
+            type = FieldType.Date,
+            format = {},
+            pattern = "uuuu-MM-dd'T'HH:mm:ss.SSSX"
+    )
     private Instant createdAt;
 
 }
