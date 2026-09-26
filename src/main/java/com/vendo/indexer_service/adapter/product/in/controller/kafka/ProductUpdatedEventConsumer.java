@@ -19,7 +19,7 @@ class ProductUpdatedEventConsumer {
 
     @KafkaListener(
             topics = "${kafka.events.product.updated-event.topic}",
-            groupId = "${kafka.events.product.updated-event.groupId}",
+            groupId = "indexer-product-updated-event-group",
             properties = {"auto.offset.reset: ${kafka.events.product.updated-event.properties.auto-offset-reset}"},
             containerFactory = "${kafka.events.product.updated-event.container-factory}"
     )
