@@ -1,12 +1,16 @@
 package com.vendo.indexer_service.adapter.product.out.elasticsearch.index;
 
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+import com.vendo.indexer_service.adapter.product.out.elasticsearch.ElasticProduct;
 import com.vendo.indexer_service.adapter.product.out.mapper.ElasticProductMapper;
 import com.vendo.indexer_service.domain.product.Product;
 import com.vendo.indexer_service.port.product.index.ProductReindexPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.DeleteQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Component;
@@ -34,11 +38,21 @@ class ProductReindexAdapter implements ProductReindexPort {
         }
 
         try {
+            clearIndex();
             operations.bulkIndex(toQueries(products), IndexCoordinates.of(PRODUCTS_INDEX));
         } finally {
             reentrantLock.unlock();
         }
     }
+
+    private void clearIndex() {
+        DeleteQuery query = DeleteQuery
+                .builder(NativeQuery.builder().withQuery(QueryBuilders.matchAll().build()._toQuery()).build())
+                .build();
+
+        operations.delete(query, ElasticProduct.class);
+    }
+
 
     @Override
     public boolean isProcessing() {
