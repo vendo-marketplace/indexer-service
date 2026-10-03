@@ -23,7 +23,7 @@ public class ElasticProductCommandAdapter implements ProductCommandPort {
 
     @Override
     public void save(Product product) {
-        repository.save(mapper.toEntity(product));
+        repository.save(mapper.toEntity(product, BASE_URL));
     }
 
     @Override

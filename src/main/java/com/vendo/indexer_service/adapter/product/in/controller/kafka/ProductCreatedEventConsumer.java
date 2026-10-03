@@ -5,7 +5,6 @@ import com.vendo.indexer_service.adapter.product.out.mapper.EventProductMapper;
 import com.vendo.indexer_service.port.product.index.ProductIndexUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +12,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 class ProductCreatedEventConsumer {
-
-    @Value("${aws.base-url}")
-    private String BASE_URL;
 
     private final EventProductMapper mapper;
     private final ProductIndexUseCase useCase;
@@ -28,6 +24,6 @@ class ProductCreatedEventConsumer {
     )
     void listenProductCreatedEvent(ProductCreatedEvent event) {
         log.info("Received event for product created: {}.", event);
-        useCase.save(mapper.toProduct(event, BASE_URL));
+        useCase.save(mapper.toProduct(event));
     }
 }
