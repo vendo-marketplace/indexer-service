@@ -1,6 +1,6 @@
 package com.vendo.indexer_service.adapter.security.in.filter;
 
-import com.vendo.indexer_service.infrastructure.props.PathProps;
+import com.vendo.security_starter.path.PathProps;
 import com.vendo.security_lib.resolver.AntPathResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,6 +18,6 @@ public class IndexerAntPathResolver implements AntPathResolver {
 
     @Override
     public boolean isPermittedPath(String path) {
-        return Arrays.stream(pathProps.getAllPaths()).anyMatch(pr -> antPathMatcher.match(pr, path));
+        return Arrays.stream(pathProps.allPaths()).anyMatch(pr -> antPathMatcher.match(pr, path));
     }
 }
